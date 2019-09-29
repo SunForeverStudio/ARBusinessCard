@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1061445730688-qcm1b7f3psq184orin92a5g3lmbglgvd.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1061445730688-qcm1b7f3psq184orin92a5g3lmbglgvd</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBDCqD3PhPRSBTpkN4Uh3LsTz1ZRu1syPY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1061445730688</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>sunforever.ARBusinessCard</string>
+	<key>PROJECT_ID</key>
+	<string>testapp-94508</string>
+	<key>STORAGE_BUCKET</key>
+	<string>testapp-94508.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1061445730688:ios:7cc2357a1b4ec99fb38165</string>
+	<key>DATABASE_URL</key>
+	<string>https://testapp-94508.firebaseio.com</string>
+</dict>
+</plist>
