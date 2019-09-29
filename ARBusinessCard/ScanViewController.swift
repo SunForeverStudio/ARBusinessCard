@@ -30,7 +30,11 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
         
         buttonNode = SCNScene(named: "art.scnassets/social_buttons.scn")!.rootNode.childNode(withName: "card", recursively: false)
         let thumbnailNode = buttonNode.childNode(withName: "thumbnail", recursively: true)
-        thumbnailNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "kboy_profile")
+        thumbnailNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "sun")
+        
+        let videoNode = buttonNode.childNode(withName: "video", recursively: true)
+//        let image:UIImage = getImageByUrl(url:"https://firebasestorage.googleapis.com/v0/b/testapp-94508.appspot.com/o/Card.PNG?alt=media&token=6e8f43c8-4d3f-49b6-a420-4b297b9bb048")
+        videoNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "kboy_profile")
         
         feedback.prepare()
     }
@@ -229,6 +233,17 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
         return customReferenceSet
     }
     
+    //URLから画像取得
+    func getImageByUrl(url: String) -> UIImage{
+        let url = URL(string: url)
+        do {
+            let data = try Data(contentsOf: url!)
+            return UIImage(data: data)!
+        } catch let err {
+            print("Error : \(err.localizedDescription)")
+        }
+        return UIImage()
+    }
     
     
     
