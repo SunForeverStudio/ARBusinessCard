@@ -34,7 +34,7 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
         
         let videoNode = buttonNode.childNode(withName: "video", recursively: true)
 //        let image:UIImage = getImageByUrl(url:"https://firebasestorage.googleapis.com/v0/b/testapp-94508.appspot.com/o/Card.PNG?alt=media&token=6e8f43c8-4d3f-49b6-a420-4b297b9bb048")
-        videoNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "kboy_profile")
+        videoNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "logo")
         
         feedback.prepare()
     }
@@ -76,9 +76,17 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
                 let Twitter = data["Twitter"] as? String
                 let Facebook = data["Facebook"] as? String
                 
-                if node.name == "facebook" {
+                if node.name == "phone" {
                     guard let number = URL(string: "tel://" + "4151231234") else { return }
                     UIApplication.shared.open(number)
+                } else if node.name == "mail" {
+                    let url = NSURL(string: "mailto:jon.doe@mail.com")
+                    UIApplication.shared.openURL(url! as URL)
+                                
+                } else if node.name == "facebook" {
+                    let safariVC = SFSafariViewController(url: URL(string: Facebook!)!)
+                    self.present(safariVC, animated: true, completion: nil)
+                    
                 } else if node.name == "twitter" {
                     let safariVC = SFSafariViewController(url: URL(string: Twitter!)!)
                     self.present(safariVC, animated: true, completion: nil)
@@ -266,71 +274,10 @@ extension ScanViewController: ARSCNViewDelegate {
         let group = SCNAction.sequence([scale1, scale2])
         buttonNode.runAction(group)
         print("test")
-        
-        //1. Check We Have An ARImageAnchor And Have Detected Our Reference Image
-
-        guard let imageAnchor = anchor as? ARImageAnchor else { return nil}
-        let referenceImage = imageAnchor.referenceImage
-        
-        //2. Get The Physical Width & Height Of Our Reference Image
-        let width = CGFloat(referenceImage.physicalSize.width)
-        let height = CGFloat(referenceImage.physicalSize.height)
-
-        //3. Create An SCNNode To Hold Our Video Player
-        let videoHolder = SCNNode()
-        let planeHeight = height/2
-        let videoHolderGeometry = SCNPlane(width: width, height: planeHeight)
-        videoHolder.transform = SCNMatrix4MakeRotation(-Float.pi / 2, 1, 0, 0)
-        videoHolder.geometry = videoHolderGeometry
-
-        //4. Place It About The Target
-        let zPosition = height - (planeHeight/2)
-        videoHolder.position = SCNVector3(0, 0, -zPosition)
-
-        //5. Create Our Video Player
-        if let videoURL = Bundle.main.url(forResource: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4", withExtension: "mp4"){
-
-            setupVideoOnNode(videoHolder, fromURL: videoURL)
-        }
-
-        //5. Add It To The Hierachy
-        buttonNode.addChildNode(videoHolder)
-        
+    
         return buttonNode
     }
     
-    /// Creates A Video Player As An SCNGeometries Diffuse Contents
-    ///
-    /// - Parameters:
-    ///   - node: SCNNode
-    ///   - url: URL
-    func setupVideoOnNode(_ node: SCNNode, fromURL url: URL){
-
-        //1. Create An SKVideoNode
-        var videoPlayerNode: SKVideoNode!
-
-        //2. Create An AVPlayer With Our Video URL
-        let videoPlayer = AVPlayer(url: url)
-
-        //3. Intialize The Video Node With Our Video Player
-        videoPlayerNode = SKVideoNode(avPlayer: videoPlayer)
-        videoPlayerNode.yScale = -1
-
-        //4. Create A SpriteKitScene & Postion It
-        let spriteKitScene = SKScene(size: CGSize(width: 600, height: 300))
-        spriteKitScene.scaleMode = .aspectFit
-        videoPlayerNode.position = CGPoint(x: spriteKitScene.size.width/2, y: spriteKitScene.size.height/2)
-        videoPlayerNode.size = spriteKitScene.size
-        spriteKitScene.addChild(videoPlayerNode)
-
-        //6. Set The Nodes Geoemtry Diffuse Contenets To Our SpriteKit Scene
-        node.geometry?.firstMaterial?.diffuse.contents = spriteKitScene
-
-        //5. Play The Video
-        videoPlayerNode.play()
-        videoPlayer.volume = 0
-
-    }
 }
 
 

@@ -20,6 +20,8 @@ class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINa
     
     @IBOutlet weak var CardImage: UIImageView!
     
+    @IBOutlet weak var PhoneBox: UITextField!
+    @IBOutlet weak var EmailBox: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()

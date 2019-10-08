@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		94AC0A1880BA2858941FC6A1 /* Pods_ARBusinessCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7840260EDF21031C56935F91 /* Pods_ARBusinessCard.framework */; };
+		C40C6FA82348E27C00C62B61 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C40C6FA72348E27C00C62B61 /* Assets.xcassets */; };
+		C4208A6B234A2B4200135203 /* CompanyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4208A6A234A2B4200135203 /* CompanyViewController.swift */; };
 		C4347DD0233F588B00C5AC3D /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = C4347DCF233F588B00C5AC3D /* art.scnassets */; };
 		C4347DD2233F5C4100C5AC3D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4347DD1233F5C4100C5AC3D /* GoogleService-Info.plist */; };
 		C43C2ABB233F556900F10B39 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C2ABA233F556900F10B39 /* AppDelegate.swift */; };
 		C43C2ABD233F556900F10B39 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C2ABC233F556900F10B39 /* SceneDelegate.swift */; };
 		C43C2ABF233F556900F10B39 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C2ABE233F556900F10B39 /* ScanViewController.swift */; };
 		C43C2AC2233F556900F10B39 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C43C2AC0233F556900F10B39 /* Main.storyboard */; };
-		C43C2AC4233F556A00F10B39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C43C2AC3233F556A00F10B39 /* Assets.xcassets */; };
 		C43C2AC7233F556A00F10B39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C43C2AC5233F556A00F10B39 /* LaunchScreen.storyboard */; };
 		C43C2ACF233F568400F10B39 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C2ACE233F568400F10B39 /* ModalViewController.swift */; };
 /* End PBXBuildFile section */
@@ -23,6 +24,8 @@
 		06F2745FE46A1CEC56616F92 /* Pods-ARBusinessCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARBusinessCard.release.xcconfig"; path = "Target Support Files/Pods-ARBusinessCard/Pods-ARBusinessCard.release.xcconfig"; sourceTree = "<group>"; };
 		4E2BC2125E23DABC318809C4 /* Pods-ARBusinessCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARBusinessCard.debug.xcconfig"; path = "Target Support Files/Pods-ARBusinessCard/Pods-ARBusinessCard.debug.xcconfig"; sourceTree = "<group>"; };
 		7840260EDF21031C56935F91 /* Pods_ARBusinessCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ARBusinessCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C40C6FA72348E27C00C62B61 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C4208A6A234A2B4200135203 /* CompanyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyViewController.swift; sourceTree = "<group>"; };
 		C4347DCF233F588B00C5AC3D /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		C4347DD1233F5C4100C5AC3D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C43C2AB7233F556900F10B39 /* ARBusinessCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARBusinessCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -30,7 +33,6 @@
 		C43C2ABC233F556900F10B39 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C43C2ABE233F556900F10B39 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		C43C2AC1233F556900F10B39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		C43C2AC3233F556A00F10B39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C43C2AC6233F556A00F10B39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C43C2AC8233F556A00F10B39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C43C2ACE233F568400F10B39 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
@@ -81,11 +83,12 @@
 				C4347DD1233F5C4100C5AC3D /* GoogleService-Info.plist */,
 				C4347DCF233F588B00C5AC3D /* art.scnassets */,
 				C43C2ABA233F556900F10B39 /* AppDelegate.swift */,
+				C40C6FA72348E27C00C62B61 /* Assets.xcassets */,
 				C43C2ABC233F556900F10B39 /* SceneDelegate.swift */,
 				C43C2ABE233F556900F10B39 /* ScanViewController.swift */,
 				C43C2ACE233F568400F10B39 /* ModalViewController.swift */,
+				C4208A6A234A2B4200135203 /* CompanyViewController.swift */,
 				C43C2AC0233F556900F10B39 /* Main.storyboard */,
-				C43C2AC3233F556A00F10B39 /* Assets.xcassets */,
 				C43C2AC5233F556A00F10B39 /* LaunchScreen.storyboard */,
 				C43C2AC8233F556A00F10B39 /* Info.plist */,
 			);
@@ -163,8 +166,8 @@
 				C43C2AC7233F556A00F10B39 /* LaunchScreen.storyboard in Resources */,
 				C4347DD0233F588B00C5AC3D /* art.scnassets in Resources */,
 				C4347DD2233F5C4100C5AC3D /* GoogleService-Info.plist in Resources */,
-				C43C2AC4233F556A00F10B39 /* Assets.xcassets in Resources */,
 				C43C2AC2233F556900F10B39 /* Main.storyboard in Resources */,
+				C40C6FA82348E27C00C62B61 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +224,7 @@
 				C43C2ABF233F556900F10B39 /* ScanViewController.swift in Sources */,
 				C43C2ABB233F556900F10B39 /* AppDelegate.swift in Sources */,
 				C43C2ABD233F556900F10B39 /* SceneDelegate.swift in Sources */,
+				C4208A6B234A2B4200135203 /* CompanyViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
