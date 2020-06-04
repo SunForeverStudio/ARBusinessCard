@@ -17,13 +17,13 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
     @IBOutlet weak var sceneView: ARSCNView!
     
     private var buttonNode: SCNNode!
-    
+    //触覚フィードバック
     private let feedback = UIImpactFeedbackGenerator()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //
+        //サーバから、名刺情報をダウンロード
         downloadImageTask()
         
         sceneView.delegate = self
@@ -41,9 +41,7 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        
-        
+
         let configuration = ARImageTrackingConfiguration()
         
         let detectionImages = loadedImagesFromDirectoryContents()
@@ -62,7 +60,6 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         //ARに表示項目定義
-        
         guard let location = touches.first?.location(in: sceneView),
             let result = sceneView.hitTest(location, options: nil).first else {
                 return
@@ -94,21 +91,9 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
                 
             }
         }, withCancel: nil)
-        
-
-        
-
     }
     
-    
-    
-    
-    
-    
-    
     //サーバから、名刺情報をダウンロード
-    
-    /// Downloads An Image From A Remote URL
     func downloadImageTask(){
         //データ取得
         Database.database().reference().child("person").observeSingleEvent(of: .value, with:{(snapshot) in
@@ -124,12 +109,12 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
                 //3. Create The Download Task & Run It
                 let downloadTask = downloadSession.downloadTask(with: url)
                 downloadTask.resume()
-                
             }
         }, withCancel: nil)
 
     }
     
+    //ローカルに画像を保存
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         
         //1. Create The Filename
@@ -147,11 +132,9 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
                 } catch {
                     print("画像削除失敗")
                 }
-
             }
 
         }
-        
         let fileURL = getDocumentsDirectory().appendingPathComponent("Card.png")
         //2. Copy It To The Documents Directory
         do {
