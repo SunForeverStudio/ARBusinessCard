@@ -9,6 +9,7 @@ target 'ARBusinessCard' do
 	pod 'Firebase/Storage'
 	pod 'FirebaseUI/Storage'
 	pod 'Firebase/Core'
+	pod 'RealmSwift', '~> 3.19.0'
 
   # Pods for ARBusinessCard
 

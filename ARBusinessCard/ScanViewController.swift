@@ -11,10 +11,15 @@ import ARKit
 import SafariServices
 import Firebase
 import FirebaseDatabase
+import RealmSwift
 
-class ScanViewController: UIViewController,URLSessionDownloadDelegate {
+class ScanViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
+    
+    //画像初期化
+    var CardImage :UIImage = UIImage()
+    var company_logo :UIImage = UIImage()
     
     private var buttonNode: SCNNode!
     //触覚フィードバック
@@ -22,19 +27,33 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //サーバから、名刺情報をダウンロード
-        downloadImageTask()
-        
         sceneView.delegate = self
+        
+        //documentDirectoryから画像取得
+        if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
+            //プロフィール写真
+            let profile_filePath = dir.appendingPathComponent( "profile.png" )
+            let profile_path:String = profile_filePath.path
+            if( FileManager.default.fileExists( atPath: profile_path ) ) {
+                 let myImage = UIImage(named: profile_path)
+                CardImage = myImage!
+            }
+            //会社ロゴ写真
+            let logo_filePath = dir.appendingPathComponent( "logo.png" )
+            let logo_path:String = logo_filePath.path
+            if( FileManager.default.fileExists( atPath: logo_path ) ) {
+                 let myImage = UIImage(named: logo_path)
+                 company_logo = myImage!
+            }
+        }
         
         buttonNode = SCNScene(named: "art.scnassets/social_buttons.scn")!.rootNode.childNode(withName: "card", recursively: false)
         let thumbnailNode = buttonNode.childNode(withName: "thumbnail", recursively: true)
-        thumbnailNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "sun")
+        thumbnailNode?.geometry?.firstMaterial?.diffuse.contents = CardImage
         
         let videoNode = buttonNode.childNode(withName: "video", recursively: true)
-//        let image:UIImage = getImageByUrl(url:"https://firebasestorage.googleapis.com/v0/b/testapp-94508.appspot.com/o/Card.PNG?alt=media&token=6e8f43c8-4d3f-49b6-a420-4b297b9bb048")
-        videoNode?.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "logo")
+
+        videoNode?.geometry?.firstMaterial?.diffuse.contents = company_logo
         
         feedback.prepare()
     }
@@ -66,102 +85,31 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
         }
         let node = result.node
         
-        //データ取得
-        Database.database().reference().child("person").observeSingleEvent(of: .value, with:{(snapshot) in
-            if let data = snapshot.value as? [String:AnyObject]{
-                //let name = data["Name"] as? String
-                let Twitter = data["Twitter"] as? String
-                let Facebook = data["Facebook"] as? String
+        let realm = try! Realm()
+        let results = realm.objects(Person.self)
+
+        if(results.count > 0){
+          
+            if node.name == "phone" {
+                guard let number = URL(string: "tel://" + "4151231234") else { return }
+                UIApplication.shared.open(number)
+            } else if node.name == "mail" {
+                let url = NSURL(string: "mailto:jon.doe@mail.com")
+                UIApplication.shared.openURL(url! as URL)
+                            
+            } else if node.name == "facebook" {
+                let safariVC = SFSafariViewController(url: URL(string: results[results.count-1].facebook)!)
+                self.present(safariVC, animated: true, completion: nil)
                 
-                if node.name == "phone" {
-                    guard let number = URL(string: "tel://" + "4151231234") else { return }
-                    UIApplication.shared.open(number)
-                } else if node.name == "mail" {
-                    let url = NSURL(string: "mailto:jon.doe@mail.com")
-                    UIApplication.shared.openURL(url! as URL)
-                                
-                } else if node.name == "facebook" {
-                    let safariVC = SFSafariViewController(url: URL(string: Facebook!)!)
-                    self.present(safariVC, animated: true, completion: nil)
-                    
-                } else if node.name == "twitter" {
-                    let safariVC = SFSafariViewController(url: URL(string: Twitter!)!)
-                    self.present(safariVC, animated: true, completion: nil)
-                }
-                
+            } else if node.name == "twitter" {
+                let safariVC = SFSafariViewController(url: URL(string: results[results.count-1].twitter)!)
+                self.present(safariVC, animated: true, completion: nil)
             }
-        }, withCancel: nil)
-    }
-    
-    //サーバから、名刺情報をダウンロード
-    func downloadImageTask(){
-        //データ取得
-        Database.database().reference().child("person").observeSingleEvent(of: .value, with:{(snapshot) in
-            if let data = snapshot.value as? [String:AnyObject]{
-                //let name = data["Name"] as? String
-                let CardUrl = data["CardUrl"] as? String
-                //1. Get The URL Of The Image
-                guard let url = URL(string: CardUrl!) else { return }
-                
-                //2. Create The Download Session
-                let downloadSession = URLSession(configuration: URLSession.shared.configuration, delegate: self, delegateQueue: nil)
-                
-                //3. Create The Download Task & Run It
-                let downloadTask = downloadSession.downloadTask(with: url)
-                downloadTask.resume()
-            }
-        }, withCancel: nil)
-
-    }
-    
-    //ローカルに画像を保存
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        
-        //1. Create The Filename
-        if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
-
-           let filePath = dir.appendingPathComponent( "Card.png" )
-           let path:String = filePath.path
             
-            if( FileManager.default.fileExists( atPath: path ) ) {//ファイルがあったら削除
-                do {
-
-                    try FileManager.default.removeItem( atPath: path )
-                    print("画像あり")
-
-                } catch {
-                    print("画像削除失敗")
-                }
-            }
-
-        }
-        let fileURL = getDocumentsDirectory().appendingPathComponent("Card.png")
-        //2. Copy It To The Documents Directory
-        do {
-            try FileManager.default.copyItem(at: location, to: fileURL)
-            
-            print("画像ダウンロード成功")
-            
-        } catch {
-            
-            print("画像ダウンロードエラー")
         }
 
-        
     }
-    
-    
-    /// Returns The Documents Directory
-    ///
-    /// - Returns: URL
-    func getDocumentsDirectory() -> URL {
-        
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        
-        return documentsDirectory
-        
-    }
+
     
     /// Creates A Set Of ARReferenceImages From All PNG Content In The Documents Directory
     ///
@@ -170,53 +118,38 @@ class ScanViewController: UIViewController,URLSessionDownloadDelegate {
         
         var index = 0
         var customReferenceSet = Set<ARReferenceImage>()
-        let documentsDirectory = getDocumentsDirectory()
         
-        do {
-            
-            let directoryContents = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil, options: [])
-            
-            let filteredContents = directoryContents.filter{ $0.pathExtension == "png" }
-            
-            
-            filteredContents.forEach { (url) in
+        do{
+            //documentDirectoryから画像取得
+            if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
+                //名刺写真
+                let card_path = dir.appendingPathComponent( "card.png" )
+                //1. Create A Data Object From Our URL
+                let imageData = try Data(contentsOf: card_path)
+                let image = UIImage(data: imageData)
                 
-                do{
-                    
-                    //1. Create A Data Object From Our URL
-                    let imageData = try Data(contentsOf: url)
-                    guard let image = UIImage(data: imageData) else { return }
-                    
-                    //2. Convert The UIImage To A CGImage
-                    guard let cgImage = image.cgImage else { return }
-                    
-                    //3. Get The Width Of The Image
-                    //let imageWidth = CGFloat(cgImage.width)
-                    
-                    
-                    
-                    //4. Create A Custom AR Reference Image With A Unique Name
-                    let customARReferenceImage = ARReferenceImage(cgImage, orientation: CGImagePropertyOrientation.up, physicalWidth: 0.1)
-                    customARReferenceImage.name = "MyCustomARImage\(index)"
-                    
-                    //4. Insert The Reference Image Into Our Set
-                    customReferenceSet.insert(customARReferenceImage)
-                    
-                    print("画像分析成功")
-                    
-                    index += 1
-                    
-                }catch{
-                    
-                    print("画像分析エラー")
-                    
-                }
+                //2. Convert The UIImage To A CGImage
+                let cgImage = image?.cgImage!
                 
+                //3. Get The Width Of The Image
+                //let imageWidth = CGFloat(cgImage.width)
+                
+                
+                
+                //4. Create A Custom AR Reference Image With A Unique Name
+                let customARReferenceImage = ARReferenceImage(cgImage!, orientation: CGImagePropertyOrientation.up, physicalWidth: 0.1)
+                customARReferenceImage.name = "MyCustomARImage\(index)"
+                
+                //4. Insert The Reference Image Into Our Set
+                customReferenceSet.insert(customARReferenceImage)
+                
+                print("画像分析成功")
+                
+                index += 1
             }
+        }catch{
             
-        } catch {
-            
-            print("画像セットエラー")
+            print("画像分析エラー")
             
         }
         

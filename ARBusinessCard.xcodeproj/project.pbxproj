@@ -17,6 +17,7 @@
 		C43C2AC2233F556900F10B39 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C43C2AC0233F556900F10B39 /* Main.storyboard */; };
 		C43C2AC7233F556A00F10B39 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C43C2AC5233F556A00F10B39 /* LaunchScreen.storyboard */; };
 		C43C2ACF233F568400F10B39 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C2ACE233F568400F10B39 /* ModalViewController.swift */; };
+		C4826C402489D37300D6F1F5 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4826C3F2489D37300D6F1F5 /* Person.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		C43C2AC6233F556A00F10B39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C43C2AC8233F556A00F10B39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C43C2ACE233F568400F10B39 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
+		C4826C3F2489D37300D6F1F5 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				C40C6FA72348E27C00C62B61 /* Assets.xcassets */,
 				C43C2ABC233F556900F10B39 /* SceneDelegate.swift */,
 				C43C2ABE233F556900F10B39 /* ScanViewController.swift */,
+				C4826C3F2489D37300D6F1F5 /* Person.swift */,
 				C43C2ACE233F568400F10B39 /* ModalViewController.swift */,
 				C43C2AC0233F556900F10B39 /* Main.storyboard */,
 				C43C2AC5233F556A00F10B39 /* LaunchScreen.storyboard */,
@@ -217,6 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4826C402489D37300D6F1F5 /* Person.swift in Sources */,
 				C43C2ACF233F568400F10B39 /* ModalViewController.swift in Sources */,
 				C43C2ABF233F556900F10B39 /* ScanViewController.swift in Sources */,
 				C43C2ABB233F556900F10B39 /* AppDelegate.swift in Sources */,

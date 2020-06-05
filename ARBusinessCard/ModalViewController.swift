@@ -11,6 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import FirebaseUI
+import RealmSwift
 
 class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate {
  
@@ -38,52 +39,60 @@ class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINa
     @IBOutlet weak var company_location: UITextField!
     
     
-    
+    //初期表示時に必要な処理を設定します。
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if(view_flg == 0){
             
-             //view切り替え
-             person_view.isHidden = false
-             company_view.isHidden = true
-             comp_view.isHidden = true
-             
-             // Do any additional setup after loading the view.
-             self.NameBox.delegate = self
-             self.TwitterBox.delegate = self
-             self.FacebookBox.delegate = self
-             
-             //データ取得、初期表示
-             Database.database().reference().child("person").observeSingleEvent(of: .value, with:{ (snapshot) in
-                if let data = snapshot.value as? [String:AnyObject]{
-                    let name = data["Name"] as? String
-                    let Twitter = data["Twitter"] as? String
-                    let Facebook = data["Facebook"] as? String
-                    //let CardUrl = data["CardUrl"] as? String
-                 
-                    self.NameBox.text = name
-                    self.TwitterBox.text = Twitter
-                    self.FacebookBox.text = Facebook
-                 
-                    //documentDirectoryから名刺画像取得
-                    if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
-                        let filePath = dir.appendingPathComponent( "Card.png" )
-                        let path:String = filePath.path
-                     
-                        if( FileManager.default.fileExists( atPath: path ) ) {
-                             let myImage = UIImage(named: path)
-                             self.CardImage.image = myImage
+        //view切り替え
+        person_view.isHidden = false
+        company_view.isHidden = true
+        comp_view.isHidden = true
+         
+        // Do any additional setup after loading the view.
+        self.NameBox.delegate = self
+        self.TwitterBox.delegate = self
+        self.FacebookBox.delegate = self
+         
+     
+        
+        let realm = try! Realm()
+        let results = realm.objects(Person.self)
 
-                        }
-                    }
+        if(results.count > 0){
+            self.NameBox.text = results[results.count-1].name
+            self.TwitterBox.text = results[results.count-1].twitter
+            self.FacebookBox.text = results[results.count-1].facebook
+            self.PhoneBox.text = results[results.count-1].phone
+            self.EmailBox.text = results[results.count-1].email
+            self.home_page.text = results[results.count-1].homepage
+            self.company_location.text = results[results.count-1].location
+            
+            //documentDirectoryから画像取得
+            if let dir = FileManager.default.urls( for: .documentDirectory, in: .userDomainMask ).first {
+                //プロフィール写真
+                let profile_filePath = dir.appendingPathComponent( "profile.png" )
+                let profile_path:String = profile_filePath.path
+                if( FileManager.default.fileExists( atPath: profile_path ) ) {
+                     let myImage = UIImage(named: profile_path)
+                     self.CardImage.image = myImage
                 }
-            }, withCancel: nil)
-        }else if(view_flg == 1){
+                //会社ロゴ写真
+                let logo_filePath = dir.appendingPathComponent( "logo.png" )
+                let logo_path:String = logo_filePath.path
+                if( FileManager.default.fileExists( atPath: logo_path ) ) {
+                     let myImage = UIImage(named: logo_path)
+                     self.company_logo.image = myImage
+                }
+                //名刺写真
+                 let card_filePath = dir.appendingPathComponent( "card.png" )
+                 let card_path:String = card_filePath.path
+                 if( FileManager.default.fileExists( atPath: card_path ) ) {
+                      let myImage = UIImage(named: card_path)
+                      self.card_img.image = myImage
+                 }
+            }
             
         }
-        
-        
     }
     
     //アルバムから写真選択された後呼び出し
@@ -158,45 +167,23 @@ class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINa
         company_view.isHidden = true
         comp_view.isHidden = false
         
-        
-        
-        if !NameBox.text!.isEmpty && !TwitterBox.text!.isEmpty && !FacebookBox.text!.isEmpty{
-                   
-            //Storageの参照（"Item"という名前で保存）
-            let storageref = Storage.storage().reference(forURL: "gs://testapp-94508.appspot.com/").child("Card.PNG")
-                    
-            //画像
-            let image = CardImage.image
-            //imageをNSDataに変換
-            let data = image!.jpegData(compressionQuality: 1.0)! as NSData
-            
-            //Storageに保存
-            storageref.putData(data as Data, metadata: nil) { (metadata, error) in
-          
-              // Fetch the download URL
-              storageref.downloadURL{ url, error in
-                 let downloadURL = url!.absoluteString
-                  //保存するデータ
-                 let values = ["Name": self.NameBox.text,
-                                "Twitter": self.TwitterBox.text,
-                                "Facebook": self.FacebookBox.text,
-                                "CardUrl":downloadURL
-                      ] as [String : Any]
-               
-                 Database.database().reference().child("person").updateChildValues(values as [AnyHashable : Any], withCompletionBlock: { (error, reference) in
-                      //エラー処理
-                      if error != nil{
-                          print(error!)
-                          return
-                      }
-                      //成功した時
-                  })
-              }
-            }
-        }
+        //DBに保存
+        let personModel = Person()
+        let realm = try! Realm()
 
-        
-        
+        // オブジェクトに値をセットする
+        personModel.name = self.NameBox.text!
+        personModel.twitter = self.TwitterBox.text!
+        personModel.facebook = self.FacebookBox.text!
+        personModel.phone = self.PhoneBox.text!
+        personModel.email = self.EmailBox.text!
+        personModel.location = self.company_location.text!
+        personModel.homepage = self.home_page.text!
+
+        // DBに書き込む
+        try! realm.write {
+            realm.add(personModel)
+        }
     }
     
     @IBAction func backButton(_ sender: Any) {
