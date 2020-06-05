@@ -93,14 +93,32 @@ class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINa
          
         if let pickedImage = info[.originalImage]
             as? UIImage {
-            CardImage.contentMode = .scaleAspectFit
+            
+            //将选择的图片保存到Document目录下
+            let fileManager = FileManager.default
+            let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                    .userDomainMask, true)[0] as String
+            let imageData = pickedImage.jpegData(compressionQuality: 1.0)
 
             if(img_flg == 1){
+                CardImage.contentMode = .scaleAspectFit
                 CardImage.image = pickedImage//プロフィール写真
+
+                let filePath = "\(rootPath)/profile.png"
+                fileManager.createFile(atPath: filePath, contents: imageData, attributes: nil)
+                
             }else if(img_flg == 2){
+                company_logo.contentMode = .scaleAspectFit
                 company_logo.image = pickedImage//会社ロゴ写真
+
+                let filePath = "\(rootPath)/logo.png"
+                fileManager.createFile(atPath: filePath, contents: imageData, attributes: nil)
             }else if(img_flg == 3){
+                card_img.contentMode = .scaleAspectFit
                 card_img.image = pickedImage//名刺写真
+
+                let filePath = "\(rootPath)/card.png"
+                fileManager.createFile(atPath: filePath, contents: imageData, attributes: nil)
             }
             
             
@@ -139,6 +157,46 @@ class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINa
         person_view.isHidden = true
         company_view.isHidden = true
         comp_view.isHidden = false
+        
+        
+        
+        if !NameBox.text!.isEmpty && !TwitterBox.text!.isEmpty && !FacebookBox.text!.isEmpty{
+                   
+            //Storageの参照（"Item"という名前で保存）
+            let storageref = Storage.storage().reference(forURL: "gs://testapp-94508.appspot.com/").child("Card.PNG")
+                    
+            //画像
+            let image = CardImage.image
+            //imageをNSDataに変換
+            let data = image!.jpegData(compressionQuality: 1.0)! as NSData
+            
+            //Storageに保存
+            storageref.putData(data as Data, metadata: nil) { (metadata, error) in
+          
+              // Fetch the download URL
+              storageref.downloadURL{ url, error in
+                 let downloadURL = url!.absoluteString
+                  //保存するデータ
+                 let values = ["Name": self.NameBox.text,
+                                "Twitter": self.TwitterBox.text,
+                                "Facebook": self.FacebookBox.text,
+                                "CardUrl":downloadURL
+                      ] as [String : Any]
+               
+                 Database.database().reference().child("person").updateChildValues(values as [AnyHashable : Any], withCompletionBlock: { (error, reference) in
+                      //エラー処理
+                      if error != nil{
+                          print(error!)
+                          return
+                      }
+                      //成功した時
+                  })
+              }
+            }
+        }
+
+        
+        
     }
     
     @IBAction func backButton(_ sender: Any) {
