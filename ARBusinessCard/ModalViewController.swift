@@ -184,6 +184,13 @@ class ModalViewController:UIViewController, UIImagePickerControllerDelegate,UINa
         try! realm.write {
             realm.add(personModel)
         }
+        
+        //スキャン画面呼び出し
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "ScanView")
+        viewController.loadView()
+        viewController.viewDidLoad()
+        viewController.viewWillAppear(true)
     }
     
     @IBAction func backButton(_ sender: Any) {
